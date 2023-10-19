@@ -3,6 +3,7 @@ package app.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -10,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
+@Table(name = "users")
 @Builder
 public class User {
     @Id
@@ -26,6 +28,6 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany
-    private List<User> friends;
+    @OneToMany(mappedBy = "user")
+    private List<UserFriend> userFriends = new ArrayList<>();
 }
