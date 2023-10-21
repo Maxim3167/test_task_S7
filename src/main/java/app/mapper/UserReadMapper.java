@@ -4,7 +4,6 @@ import app.dto.UserReadDto;
 import app.entity.User;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
 @Component
 public class UserReadMapper implements Mapper<User, UserReadDto> {
     @Override

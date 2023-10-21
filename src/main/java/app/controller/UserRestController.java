@@ -1,13 +1,9 @@
 package app.controller;
 
-import app.dto.AuthenticationRequestDto;
-import app.dto.CreateUserDto;
-import app.dto.UserFriendReadDto;
-import app.dto.UserReadDto;
+import app.dto.*;
 import app.entity.User;
 import app.repository.UserRepository;
 import app.security.jwt.JwtTokenProvider;
-import app.service.UserFriendService;
 import app.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,20 +24,13 @@ public class UserRestController {
 
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
-    private final UserFriendService userFriendService;
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/registration")
     @ResponseStatus(HttpStatus.CREATED)
     public UserReadDto registerUser(@RequestBody CreateUserDto createUserDto){
-       return userService.saveUser(createUserDto);
-    }
-
-
-    @GetMapping("/friends")
-    public List<UserFriendReadDto> findAllFriends(@RequestParam Long id, @RequestHeader(required = false) String token){
-        return userFriendService.findAllFriendsById(id);
+        return userService.saveUser(createUserDto);
     }
 
     @PostMapping("/login")
@@ -55,7 +44,7 @@ public class UserRestController {
                 throw new UsernameNotFoundException("User with username: " + username + " not found");
             }
 
-            String token = jwtTokenProvider.createToken(username, Collections.singletonList(user.get().getRole())); // здесь не хватает одного параметра(возможно, в этом проблема)
+            String token = jwtTokenProvider.createToken(username, Collections.singletonList(user.get().getRole()));
 
             Map<Object, Object> response = new HashMap<>();
             response.put("username", username);
@@ -66,4 +55,32 @@ public class UserRestController {
             throw new BadCredentialsException("Invalid username or password");
         }
     }
+
+    @PostMapping("/addFriend")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addFriend(@RequestBody UserFriendCreateDto userFriendDto,
+                          @RequestParam Long userId,
+                          @RequestHeader String token){
+        userService.addFriend(userFriendDto,userId);
     }
+
+    @DeleteMapping("/deleteFriend")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteFriend(@RequestParam Long friendId,
+                             @RequestHeader String token){
+        userService.deleteFriend(friendId);
+    }
+
+    @GetMapping("/findFriends")
+    public List<UserFriendReadDto> findFriends(@RequestParam(required = false) String firstName,
+                                               @RequestParam(required = false) String lastName,
+                                               @RequestHeader String token){
+        return userService.findFriends(firstName,lastName);
+    }
+
+    @GetMapping
+    public List<UserFriendReadDto> findAllFriends(@RequestParam Long id,
+                                                  @RequestHeader String token){
+        return userService.findAllFriendsById(id);
+    }
+}

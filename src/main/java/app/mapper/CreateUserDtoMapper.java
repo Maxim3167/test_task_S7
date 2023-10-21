@@ -10,6 +10,8 @@ import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 
+import static app.entity.Role.USER;
+
 @Component
 @RequiredArgsConstructor
 public class CreateUserDtoMapper implements Mapper<CreateUserDto, User> {
@@ -26,6 +28,7 @@ public class CreateUserDtoMapper implements Mapper<CreateUserDto, User> {
                         .firstName(createUserDto.firstName())
                         .birthDate(createUserDto.birthDate())
                         .build())
+                .role(USER)
                 .email(createUserDto.email())
                 .password(password)
                 .build();

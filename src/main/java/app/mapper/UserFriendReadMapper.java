@@ -10,9 +10,8 @@ public class UserFriendReadMapper implements Mapper<UserFriend, UserFriendReadDt
     public UserFriendReadDto map(UserFriend userFriend) {
         return UserFriendReadDto
                 .builder()
-                .lastName(userFriend.getPersonalInfo().getLastName())
-                .firstName(userFriend.getPersonalInfo().getFirstName())
-                .birthDate(userFriend.getPersonalInfo().getBirthDate())
+                .lastName(userFriend.getLastName())
+                .firstName(userFriend.getFirstName())
                 .build();
     }
 }

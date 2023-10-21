@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 @Repository
-public interface UserFriendRepository extends JpaRepository<UserFriend,Long> {
+public interface UserFriendRepository extends JpaRepository<UserFriend,Long>, CustomUserFriendRepository {
     List<UserFriend> findUserFriendsByUserId(Long userId);
 }

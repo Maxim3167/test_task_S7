@@ -4,12 +4,10 @@ import app.entity.Role;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -34,11 +32,10 @@ public class JwtTokenProvider {
         secret = Base64.getEncoder().encodeToString(secret.getBytes());
     }
 
-    public String createToken(String username, List<Role> roles) { // здесь не хватает одного параметра(возможно, в этом проблема)
+    public String createToken(String username, List<Role> roles) {
 
         Claims claims = Jwts.claims().setSubject(username);
-        claims.put("roles", getRoleNames(roles)); // тут закоментили. Возможно, в этом проблема
-
+        claims.put("roles", getRoleNames(roles));
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
@@ -52,7 +49,7 @@ public class JwtTokenProvider {
 
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(getUsername(token));
-        return new UsernamePasswordAuthenticationToken(userDetails,"",userDetails.getAuthorities()); // тут не хватает одного параметра
+        return new UsernamePasswordAuthenticationToken(userDetails,"",userDetails.getAuthorities());
     }
 
     public String getUsername(String token) {
@@ -60,9 +57,9 @@ public class JwtTokenProvider {
     }
 
     public String getToken(HttpServletRequest req) {
-        String bearerToken = req.getHeader("Token");
-        if (bearerToken != null) {
-            return bearerToken;
+        String token = req.getHeader("Token");
+        if (token != null) {
+            return token;
         }
         return null;
     }
@@ -77,7 +74,7 @@ public class JwtTokenProvider {
 
             return true;
         } catch (JwtException | IllegalArgumentException e) {
-            throw new JwtAuthenticationException("JWT token is expired or invalid");
+            throw new JwtAuthenticationException("JWT токен не валиден или истек срок действия");
         }
     }
 
