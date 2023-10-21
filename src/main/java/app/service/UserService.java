@@ -47,17 +47,21 @@ public class UserService  {
     public void addFriend(UserFriendCreateDto userFriendDto, Long userId) {
         Optional<User> user = userRepository.findById(userId);
         if(user.isEmpty()){
+            log.error("Пользователя с id " + userId + " не сущесвует");
             throw new RuntimeException("Пользователя с id " + userId + " не сущесвует");
         }
         Optional.of(userFriendDto)
                 .map(userFriendCreateDtoMapper::map)
                 .map(userFriendRepository::save)
                 .ifPresent(userFriend -> userFriend.setUser(user.get()));
+        log.info("Пользователь " + userFriendDto.firstName() + " " + userFriendDto.lastName() + " добавлен в друзья");
     }
 
     @Transactional
     public void deleteFriend(Long friendId){
+        Optional<UserFriend> friend = userFriendRepository.findById(friendId);
         userFriendRepository.deleteById(friendId);
+        log.info("Пользователь " + friend.get().getFirstName() + " удалён из друзей");
     }
 
 
@@ -70,6 +74,7 @@ public class UserService  {
 
     public List<UserFriendReadDto> findAllFriendsById(Long id) {
         if(id == null){
+            log.error("Id пользователя не был передан");
             throw new RuntimeException("Id пользователя не был передан");
         }
         List<UserFriend> userFriendsByUserId = userFriendRepository.findUserFriendsByUserId(id);
