@@ -21,7 +21,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Slf4j
-public class UserService implements UserDetailsService {
+public class UserService  {
     private final UserRepository userRepository;
     private final CreateUserDtoMapper createUserDtoMapper;
     private final UserReadMapper userReadMapper;
@@ -36,16 +36,6 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> {
                     log.error("Ошибка при сохранении пользователя");
                     return new RuntimeException("Ошибка при сохранении пользователя");
-                });
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findUserByEmail(username)
-                .map(user -> new User(user.getEmail(),user.getPassword(), Collections.singleton(user.getRole())))
-                .orElseThrow(() -> {
-                    log.error("Ошибка при авторизации");
-                    return new UsernameNotFoundException("Ошибка при авторизации пользователя: " + username);
                 });
     }
 }

@@ -13,6 +13,11 @@ spring:
           auto: validate
         dialect:
 
+jwt:
+  token:
+    secret: jwtAuth
+    expired: 3600000
+
 logging:
   level:
     root: INFO
