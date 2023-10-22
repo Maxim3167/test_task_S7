@@ -5,6 +5,7 @@ import app.entity.User;
 import app.repository.UserRepository;
 import app.security.jwt.JwtTokenProvider;
 import app.service.UserService;
+import app.util.StringErrorBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +14,11 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ValidationException;
 import java.util.*;
 
 @RestController
@@ -29,13 +33,23 @@ public class UserRestController {
 
     @PostMapping("/registration")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserReadDto registerUser(@RequestBody CreateUserDto createUserDto){
+    public UserReadDto registerUser(@RequestBody @Validated CreateUserDto createUserDto,
+                                    BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            String errorString = StringErrorBuilder.buildErrorString(bindingResult);
+            throw new ValidationException(errorString);
+        }
         return userService.saveUser(createUserDto);
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody AuthenticationRequestDto dto){
+    public ResponseEntity login(@RequestBody @Validated AuthenticationRequestDto dto,
+                                BindingResult bindingResult){
         try {
+            if(bindingResult.hasErrors()){
+                String errorString = StringErrorBuilder.buildErrorString(bindingResult);
+                throw new ValidationException(errorString);
+            }
             String username = dto.email();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, dto.password()));
             Optional<User> user = userRepository.findUserByEmail(username);
@@ -58,10 +72,11 @@ public class UserRestController {
 
     @PostMapping("/addFriend")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addFriend(@RequestBody UserFriendCreateDto userFriendDto,
+    public void addFriend(//@RequestBody UserFriendCreateDto userFriendDto,
+                          @RequestParam Long friendId,
                           @RequestParam Long userId,
                           @RequestHeader String token){
-        userService.addFriend(userFriendDto,userId);
+        userService.addFriend(userId,friendId);
     }
 
     @DeleteMapping("/deleteFriend")

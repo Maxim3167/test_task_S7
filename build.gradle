@@ -22,13 +22,12 @@ dependencies {
     implementation "org.springdoc:springdoc-openapi-ui:${versions.springdoc}"
     implementation 'io.jsonwebtoken:jjwt:0.8.0'
 
-    // implementation 'org.liquibase:liquibase-core'
+    implementation 'org.liquibase:liquibase-core'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
     runtimeOnly 'org.postgresql:postgresql'
 
-    testImplementation "org.testcontainers:postgresql:${versions.testcontainers}"
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

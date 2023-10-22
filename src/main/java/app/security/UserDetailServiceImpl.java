@@ -25,11 +25,5 @@ public class UserDetailServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("User with username: " + username + " not found");
         }
         return jwtUserMapper.map(user.get());
-//        return userRepository.findUserByEmail(username)
-//                .map(user -> new User(user.getEmail(),user.getPassword(), Collections.singleton(user.getRole())))
-//                .orElseThrow(() -> {
-//                    log.error("Ошибка при авторизации");
-//                    return new UsernameNotFoundException("Ошибка при авторизации пользователя: " + username);
-//                });
     }
 }
