@@ -72,7 +72,7 @@ public class UserRestController {
 
     @PostMapping("/addFriend")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addFriend(//@RequestBody UserFriendCreateDto userFriendDto,
+    public void addFriend(
                           @RequestParam Long friendId,
                           @RequestParam Long userId,
                           @RequestHeader String token){
