@@ -8,7 +8,7 @@ stages:
   - deploy
 
 gradle-build:
-  image: openjdk:17-alpine
+  image: gradle:latest
   stage: build
   script: "gradle clean jar"
   rules:
