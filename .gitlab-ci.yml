@@ -1,0 +1,23 @@
+image: docker:latest
+
+services:
+  - docker:dind
+
+stages:
+  - build
+  - deploy
+
+gradle-build:
+  image: 8.5-jdk17-alpine
+  stage: build
+  script: "gradle clean jar"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
+
+deploy:
+  stage: deploy
+  script:
+    - docker-compose down
+    - docker-compose up -d
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
