@@ -2,9 +2,6 @@ image:
   name: docker/compose:1.22.0 # update tag to whatever version you want to use.
   entrypoint: ["/bin/sh", "-c"]
 
-services:
-  - docker:dind
-
 before_script:
   - docker-compose --version
 
@@ -22,7 +19,6 @@ stages:
 deploy:
   stage: deploy
   script:
-    - export DOCKER_HOST=unix:///var/run/docker.sock
     - docker-compose down
     - docker-compose up -d
   rules:
