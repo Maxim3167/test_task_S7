@@ -2,21 +2,19 @@ image:
   name: docker/compose:1.22.0 # update tag to whatever version you want to use.
   entrypoint: ["/bin/sh", "-c"]
 
-before_script:
-  - docker-compose --version
-
 stages:
-  #- build
+  - build
   - deploy
 
-#gradle-build:
-#  image: gradle:latest
-#  stage: build
-#  script: "gradle clean jar"
-#  rules:
-#    - if: $CI_COMMIT_BRANCH == "master"
+gradle-build:
+  image: gradle:latest
+  stage: build
+  script: "gradle clean jar"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
 
 deploy:
+  image: docker/compose:1.22.0
   stage: deploy
   script:
     - docker-compose down
