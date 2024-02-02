@@ -1,17 +1,11 @@
-image: docker:19-dind
+image: docker:19
 
 services:
-  - docker:dind
+  - docker:docker:19
 
 stages:
   - build
   - deploy
-
-before_script:
-  - apt-get update
-  - apt-get install -y python3 python3-pip
-  - pip install docker-compose
-
 
 gradle-build:
   image: gradle:latest
