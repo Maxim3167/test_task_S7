@@ -1,4 +1,6 @@
-image: tmaier/docker-compose:latest
+image:
+  name: docker/compose:1.22.0 # update tag to whatever version you want to use.
+  entrypoint: ["/bin/sh", "-c"]
 
 services:
   - docker:dind
