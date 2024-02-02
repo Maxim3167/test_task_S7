@@ -17,6 +17,12 @@ jar {
         attributes 'Main-Class': 'app.MyApplication'
     }
 }
+tasks.register('copyJarToRoot') {
+    copy {
+        from 'build/libs/test_task_S7-1.0-SNAPSHOT-plain.jar'
+        into "/"
+    }
+}
 
 shadowJar {
     mergeServiceFiles()
@@ -53,3 +59,4 @@ test {
     useJUnitPlatform()
 }
 shadowJar.dependsOn jar
+copyJarToRoot.dependsOn shadowJar
