@@ -22,7 +22,7 @@ stages:
 deploy:
   stage: deploy
   script:
-    - export DOCKER_HOST=tcp://docker:2375
+    - export DOCKER_HOST=unix:///var/run/docker.sock
     - docker-compose down
     - docker-compose up -d
   rules:
