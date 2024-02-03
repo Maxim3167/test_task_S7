@@ -16,7 +16,12 @@ jar {
         attributes 'Main-Class': 'app.MyApplication'
     }
 }
-
+tasks.register('copyJarToRoot') {
+    copy {
+        from 'build/libs/test_task_S7-1.0-SNAPSHOT.jar'
+        into "/"
+    }
+}
 
 group = 'org.task.S7'
 version = '1.0-SNAPSHOT'
