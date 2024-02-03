@@ -9,16 +9,15 @@ gradle-build:
   image: gradle:latest
   stage: build
   script:
-    - echo "Hello"
+    - "gradle clean"
+    - "gradle bootJar"
   rules:
     - if: $CI_COMMIT_BRANCH == "master"
 
 deploy:
   stage: deploy
   script:
-    - "gradle clean"
-    - "gradle copyJarToRoot"
     - docker-compose down
-    - docker-compose up -d
+    - docker-compose up -d --build
   rules:
     - if: $CI_COMMIT_BRANCH == "master"
