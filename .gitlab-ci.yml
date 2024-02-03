@@ -11,7 +11,9 @@ gradle-build:
   script:
     - "gradle clean"
     - "gradle bootJar"
-    - "gradle copyJarToRoot"
+  artifacts:
+    paths:
+      - build/libs/test_task_S7-1.0-SNAPSHOT.jar
   rules:
     - if: $CI_COMMIT_BRANCH == "master"
 
