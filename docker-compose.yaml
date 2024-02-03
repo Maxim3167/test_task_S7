@@ -13,6 +13,8 @@ services:
   app:
     build: .
     container_name: app
+    volumes:
+      - C:\Users\Maxim Kabanov\test_task_S7:/app
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=root
