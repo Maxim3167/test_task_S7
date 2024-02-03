@@ -12,6 +12,8 @@ services:
 
   app:
     build: .
+    volumes:
+      - ./:/app
     container_name: app
     environment:
       - POSTGRES_USER=postgres
