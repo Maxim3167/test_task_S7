@@ -9,14 +9,15 @@ gradle-build:
   image: gradle:latest
   stage: build
   script:
-    - "gradle clean"
-    - "gradle copyJarToRoot"
+    - echo "Hello"
   rules:
     - if: $CI_COMMIT_BRANCH == "master"
 
 deploy:
   stage: deploy
   script:
+    - "gradle clean"
+    - "gradle copyJarToRoot"
     - docker-compose down
     - docker-compose up -d
   rules:
