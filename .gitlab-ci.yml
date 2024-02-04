@@ -5,6 +5,7 @@ stages:
   - build
   - deploy
 
+
 gradle-build:
   image: gradle:latest
   stage: build
