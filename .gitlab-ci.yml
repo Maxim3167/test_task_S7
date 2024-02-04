@@ -1,10 +1,6 @@
-image:
-  name: docker/compose:1.22.0
-  entrypoint: ["/bin/sh", "-c"]
 stages:
   - build
   - deploy
-
 
 gradle-build:
   image: gradle:latest
@@ -19,9 +15,12 @@ gradle-build:
     - if: $CI_COMMIT_BRANCH == "master"
 
 deploy:
+  image: openjdk:latest
+  services:
+    - docker:dind
   stage: deploy
   script:
-    - docker-compose down
-    - docker-compose up -d --build
+    docker-compose up -d --build
+    echo "Success"
   rules:
     - if: $CI_COMMIT_BRANCH == "master"
